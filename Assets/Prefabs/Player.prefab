@@ -233,7 +233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 997546903522773956}
-  _speedBoostAmount: 0.5
+  _fireRateBoostAmount: 0.1
 --- !u!114 &6218004672039384767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,7 +247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 997546903522773956}
-  _damageBoostAmount: 0
+  _damageBoostAmount: 1
 --- !u!114 &4587475644296633112
 MonoBehaviour:
   m_ObjectHideFlags: 0

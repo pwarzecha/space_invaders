@@ -10,8 +10,8 @@ public class Player : MonoBehaviour, IDamageable
     private bool _canMove = false;
     private int _health;
     private float _fireTimer;
-    private float _projectileSpeedBoost;
-    private int _projectileDamageBoost;
+    private float _fireInterval;
+    private int _projectileDamage;
     private int _projectileAmount;
     public Action OnDie;
     public Action<int> OnHealthUpdated;
@@ -25,8 +25,8 @@ public class Player : MonoBehaviour, IDamageable
     public void Initialize(Vector3 spawnPosition)
     {
         _health = _playerSettingsSO.maxHealth;
-        _projectileSpeedBoost = _playerSettingsSO.baseProjectileSpeedBoost;
-        _projectileDamageBoost = _playerSettingsSO.baseProjectileDamageBoost;
+        _fireInterval = _playerSettingsSO.baseFireInterval;
+        _projectileDamage = _playerSettingsSO.baseDamage;
         _projectileAmount = _playerSettingsSO.baseProjectilesAmount;
 
         transform.position = spawnPosition;
@@ -84,7 +84,7 @@ public class Player : MonoBehaviour, IDamageable
     private void HandleFiring()
     {
         _fireTimer += Time.deltaTime;
-        if (_fireTimer >= _playerSettingsSO.fireInterval)
+        if (_fireTimer >= _fireInterval)
         {
             Fire();
             _fireTimer = 0.0f;
@@ -103,7 +103,7 @@ public class Player : MonoBehaviour, IDamageable
 
             var projectileInitPosition = transform.position + _playerSettingsSO.projectileSpawnOffset;
             var projectile = ProjectilePoolManager.Instance.Get(ProjectileType.Player);
-            projectile.Initialize(projectileInitPosition, direction, _projectileDamageBoost, _projectileSpeedBoost);
+            projectile.Initialize(projectileInitPosition, direction, _projectileDamage);
 
             var vfx = VFXPoolManager.Instance.Get(VFXType.Muzzle);
             vfx.transform.position = projectileInitPosition;
@@ -117,6 +117,8 @@ public class Player : MonoBehaviour, IDamageable
         {
             Die();
         }
+
+        OnHealthUpdated?.Invoke(_health);
     }
 
     private void Die()
@@ -135,29 +137,34 @@ public class Player : MonoBehaviour, IDamageable
     public void TryHealUp(int _healthAmount)
     {
         _health = Mathf.Clamp(_health + _healthAmount, 0, _playerSettingsSO.maxHealth);
+        OnHealthUpdated?.Invoke(_health);
+        Debug.Log($"New health value: {_health}");
     }
 
     public void IncreaseProjectileDamage(int damageBoostAmount)
     {
-        _projectileDamageBoost += damageBoostAmount;
+        _projectileDamage = Mathf.Clamp(_projectileDamage + damageBoostAmount, _playerSettingsSO.baseDamage, _playerSettingsSO.maxDamage);
+        Debug.Log($"New projectile damage boost value: {_projectileDamage}");
     }
 
     public void ResetProjectileDamage()
     {
-        _projectileDamageBoost = _playerSettingsSO.baseProjectileDamageBoost;
+        _projectileDamage = _playerSettingsSO.baseDamage;
     }
-    public void IncreaseProjectileSpeed(float speedBoostAmount)
+    public void IncreaseFireRate(float speedBoostAmount)
     {
-        _projectileSpeedBoost += speedBoostAmount;
+        _fireInterval = Mathf.Clamp(_fireInterval - speedBoostAmount, _playerSettingsSO.minFireInterval, _playerSettingsSO.baseFireInterval);
+        Debug.Log($"New projectile speed boost value: {_fireInterval}");
     }
 
-    public void ResetProjectileSpeed()
+    public void ResetFireRate()
     {
-        _projectileSpeedBoost = _playerSettingsSO.baseProjectileSpeedBoost;
+        _fireInterval = _playerSettingsSO.baseFireInterval;
     }
     public void IncreaseProjectilesAmount(int amountBoost)
     {
-        _projectileAmount = Mathf.Clamp(_projectileAmount += amountBoost, 1, _playerSettingsSO.maxProjectilesAmount);
+        _projectileAmount = Mathf.Clamp(_projectileAmount + amountBoost, 1, _playerSettingsSO.maxProjectilesAmount);
+        Debug.Log($"New projectile amount value: {_projectileAmount}");
     }
 
     public void ResetProjectileAmount()

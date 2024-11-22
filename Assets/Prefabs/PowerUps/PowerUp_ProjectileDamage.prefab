@@ -12,7 +12,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: ea020ec9b65ccae4a9c2a4b9e9202b50, type: 2}
+      objectReference: {fileID: 2100000, guid: 9ff8907adb5b14843b55e81c8e101303, type: 2}
+    - target: {fileID: 3322102763667225299, guid: 195424833b2e94e4caa204a418379bf2,
+        type: 3}
+      propertyPath: _type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3572435999392199928, guid: 195424833b2e94e4caa204a418379bf2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -66,7 +71,7 @@ PrefabInstance:
     - target: {fileID: 5739546006976547901, guid: 195424833b2e94e4caa204a418379bf2,
         type: 3}
       propertyPath: m_Name
-      value: PowerUp_BulletHealth
+      value: PowerUp_ProjectileDamage
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

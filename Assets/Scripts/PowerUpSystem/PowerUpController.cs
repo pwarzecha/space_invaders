@@ -25,6 +25,7 @@ public class PowerUpController : MonoBehaviour
         {
             if (data.PowerUpType == powerUpType && data.PowerUpBehaviour != null)
             {
+                Debug.Log($"Enabled {powerUpType.ToString()} power up.");
                 data.PowerUpBehaviour.EnablePowerUp();
                 return;
             }

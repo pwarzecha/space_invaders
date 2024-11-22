@@ -63,7 +63,7 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
     private void Fire()
     {
         Projectile projectile = ProjectilePoolManager.Instance.Get(ProjectileType.Enemy);
-        projectile.Initialize(transform.position, Vector3.down, settings.projectileDamageBoost, settings.projectileSpeedBoost);
+        projectile.Initialize(transform.position, Vector3.down, settings._projectileDamage);
     }
 
     public void Hit(int damage)

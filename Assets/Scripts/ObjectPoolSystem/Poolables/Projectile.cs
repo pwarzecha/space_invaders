@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour, IPoolable, IDamageable
 {
-    [SerializeField] private ProjectileSettingsSO _projectileSettingsSO;
     [SerializeField] private ProjectileType _type;
-    private int _damage;
+    private float speed = 5f;
     private Vector3 _velocity;
+    private int _damage;
     private Vector2 screenBoundsX;
     private Vector2 screenBoundsY;
-    public void Initialize(Vector3 initPosition, Vector3 direction, int damageBoost, float speedBoost)
+    public void Initialize(Vector3 initPosition, Vector3 direction, int damage)
     {
         transform.position = initPosition;
-        _damage = _projectileSettingsSO.baseDamage + damageBoost;
-        _velocity = direction.normalized * (_projectileSettingsSO.baseSpeed + speedBoost);
+        _damage = damage;
+        _velocity = direction.normalized * speed;
     }
 
     public void OnCreated()

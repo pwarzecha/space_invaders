@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 public enum PowerUpType
 {
-    BulletSpeed,
-    BulletDamage,
-    BulletAmount,
+    FireRate,
+    ProjectileDamage,
+    ProjectileAmount,
     Heal,
 }
 public class PowerUpPoolManager : ObjectPoolManagerBase<PowerUp, PowerUpType>

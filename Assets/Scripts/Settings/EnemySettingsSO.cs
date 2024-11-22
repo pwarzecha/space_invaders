@@ -13,8 +13,7 @@ public class EnemySettingsSO : ScriptableObject
     [Header("Combat")]
     public int initHealth = 2;
     public float fireInterval = 2.5f;
-    public float projectileSpeedBoost = 0f;
-    public int projectileDamageBoost = 0;
+    public int _projectileDamage = 1;
 
     [Header("Power-Up Drop")]
     public float powerUpDropChance = 0.1f;
