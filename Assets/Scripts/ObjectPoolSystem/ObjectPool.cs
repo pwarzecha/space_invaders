@@ -6,7 +6,7 @@ public class ObjectPool<T> where T : MonoBehaviour, IPoolable
     private readonly Queue<T> _pool = new Queue<T>();
     private readonly T _prefab;
     private readonly Transform _parent;
-
+    private readonly List<T> activeObjects = new List<T>();
     public ObjectPool(T prefab, int initialSize, Transform parent = null)
     {
         _prefab = prefab;
@@ -37,13 +37,21 @@ public class ObjectPool<T> where T : MonoBehaviour, IPoolable
         var obj = _pool.Dequeue();
         obj.OnPooled();
         obj.gameObject.SetActive(true);
+        activeObjects.Add(obj);
         return obj;
     }
 
     public void Return(T obj)
     {
-        obj.OnReturn();
-        obj.gameObject.SetActive(false);
-        _pool.Enqueue(obj);
+        if (activeObjects.Remove(obj))
+        {
+            obj.OnReturn();
+            obj.gameObject.SetActive(false);
+            _pool.Enqueue(obj);
+        }
+    }
+    public List<T> GetActiveObjects()
+    {
+        return new List<T>(activeObjects);
     }
 }

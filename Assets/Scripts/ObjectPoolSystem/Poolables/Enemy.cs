@@ -13,7 +13,6 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
     public void OnCreated()
     {
         minYPosition = GameController.Instance.GameSettingsSO.screenBoundsY.x;
-
     }
 
     public void OnPooled()

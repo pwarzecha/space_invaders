@@ -122,8 +122,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 0
-  _projectileSettingsSO: {fileID: 11400000, guid: 91875247d60c494448f7ad2b1f7669e2,
-    type: 2}
+  _trailRenderer: {fileID: 594580020085229029}
+  _particleSystem: {fileID: 1079599147731308212}
 --- !u!96 &594580020085229029
 TrailRenderer:
   serializedVersion: 3

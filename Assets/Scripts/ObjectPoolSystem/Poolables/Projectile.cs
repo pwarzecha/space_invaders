@@ -3,6 +3,8 @@ using UnityEngine;
 public class Projectile : MonoBehaviour, IPoolable, IDamageable
 {
     [SerializeField] private ProjectileType _type;
+    [SerializeField] private TrailRenderer _trailRenderer;
+    [SerializeField] private ParticleSystem _particleSystem;
     private float speed = 5f;
     private Vector3 _velocity;
     private int _damage;
@@ -23,11 +25,13 @@ public class Projectile : MonoBehaviour, IPoolable, IDamageable
 
     public void OnPooled()
     {
-
+        _particleSystem.Play();
     }
 
     public void OnReturn()
     {
+        _trailRenderer.Clear();
+        _particleSystem.Stop();
         _damage = 0;
         _velocity = Vector3.zero;
     }
