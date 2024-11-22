@@ -14,11 +14,11 @@ public class UIManager : Singleton<UIManager>
     public GameplayUI GameplayUI => _gameplayUI; 
     public GameOverUI GameOverUI => _gameOverUI; 
 
-    public void InitializeUIElements(int initialPlayerHealth)
+    public void InitializeUIElements()
     {
         _menuUI.Initialize();
-        _gameplayUI.Initialize(initialPlayerHealth);
-        _gameOverUI.Initialize();
+        _gameplayUI.Hide();
+        _gameOverUI.Hide();
     }
 
     public void RefreshScore(int newScore)

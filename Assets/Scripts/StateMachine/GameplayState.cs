@@ -16,6 +16,7 @@ public class GameplayState : GameStateBase
         _player.Initialize(_gameSettingsSO.spawnPosition);
         _player.OnDie += OnPlayerDie;
         _player.OnHealthUpdated += OnHealthUpdated;
+        UIManager.Instance.GameplayUI.Initialize(_player.PlayerSettingsSO.maxHealth);
         UIManager.Instance.GameplayUI.Show();
         GameController.Instance.OnGameStarted();
     }

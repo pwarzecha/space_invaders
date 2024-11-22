@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable
 {
     [SerializeField] private PlayerSettingsSO _playerSettingsSO;
 
@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     private int _projectileAmount;
     public Action OnDie;
     public Action<int> OnHealthUpdated;
+
+    public PlayerSettingsSO PlayerSettingsSO => _playerSettingsSO;
 
     private void Awake()
     {
@@ -99,8 +101,12 @@ public class Player : MonoBehaviour
             float angle = startingAngle + i * angleStep;
             Vector3 direction = Quaternion.Euler(0, 0, angle) * Vector3.up;
 
+            var projectileInitPosition = transform.position + _playerSettingsSO.projectileSpawnOffset;
             var projectile = ProjectilePoolManager.Instance.Get(ProjectileType.Player);
-            projectile.Initialize(transform.position, direction, _projectileDamageBoost, _projectileSpeedBoost);
+            projectile.Initialize(projectileInitPosition, direction, _projectileDamageBoost, _projectileSpeedBoost);
+
+            var vfx = VFXPoolManager.Instance.Get(VFXType.Muzzle);
+            vfx.transform.position = projectileInitPosition;
         }
     }
 
@@ -119,6 +125,9 @@ public class Player : MonoBehaviour
         _inputActions.Player.Disable();
         _inputActions.Player.Movement.performed -= OnMovementPerformed;
         _inputActions.Player.Movement.canceled -= OnMovementCanceled;
+
+        var vfx = VFXPoolManager.Instance.Get(VFXType.Explosion);
+        vfx.transform.position = transform.position;
 
         OnDie?.Invoke();
     }

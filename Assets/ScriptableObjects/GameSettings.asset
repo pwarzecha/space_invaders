@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53f8ce3379321234aa19d9f86f048588, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  initialPlayerHealth: 0
+  initialPlayerHealth: 3
+  screenBoundsX: {x: -9, y: 9}
+  screenBoundsY: {x: -2, y: 14}
+  spawnPosition: {x: 0, y: 0, z: 0}
   enemySpawnInterval: 1
-  spawnAreaMin: {x: -5, y: 5, z: 0}
-  spawnAreaMax: {x: 5, y: 5, z: 0}
+  spawnAreaMin: {x: -8, y: 15, z: 0}
+  spawnAreaMax: {x: 8, y: 15, z: 0}
   powerUpSpawnChance: 0.1

@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameController : Singleton<GameController>
 {
     [SerializeField] private GameSettingsSO gameSettingsSO;
-    [SerializeField] private Player _player;
+    [SerializeField] private Player _player; 
     private StateMachine stateMachine;
     bool _running = true;
 
@@ -14,12 +14,13 @@ public class GameController : Singleton<GameController>
     private GameOverState _gameOverState;
 
     public bool Running => _running;
+    public GameSettingsSO GameSettingsSO => gameSettingsSO;
 
     protected override void Awake()
     {
         base.Awake();
         Application.targetFrameRate = 60;
-        UIManager.Instance.InitializeUIElements(gameSettingsSO.initialPlayerHealth);
+        UIManager.Instance.InitializeUIElements();
         InitializeStateMachine();
         SetState(_mainMenuState);
         UIManager.Instance.MenuUI.OnPlayButtonSubmitted += OnPlayButtonSubmitted;

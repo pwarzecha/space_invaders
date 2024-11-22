@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c093aa43988b6847aad0904c2bb2ace, type: 3}
   m_Name: BasicEnemySettings
   m_EditorClassIdentifier: 
-  enemyType: 1
-  scoreReward: 0
+  enemyType: 0
+  scoreReward: 1
   movementSpeed: 2
-  baseHealth: 2
-  maxHealthScaling: 5
+  initHealth: 2
   fireInterval: 2.5
+  projectileSpeedBoost: 0
+  projectileDamageBoost: 0
   powerUpDropChance: 0.1

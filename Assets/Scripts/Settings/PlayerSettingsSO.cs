@@ -14,4 +14,7 @@ public class PlayerSettingsSO : ScriptableObject
     public int baseProjectilesAmount = 1;
     public int maxProjectilesAmount = 5;
 
+    [Header("Others")]
+    public Vector3 projectileSpawnOffset;
+
 }

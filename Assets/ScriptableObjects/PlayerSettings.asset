@@ -15,6 +15,8 @@ MonoBehaviour:
   movementSpeed: 5
   maxHealth: 3
   fireInterval: 0.4
-  fireRateBoostMultiplier: 0.9
-  movementSpeedBoostMultiplier: 1.5
-  fireRateBoostDuration: 5
+  baseProjectileSpeedBoost: 0
+  baseProjectileDamageBoost: 0
+  baseProjectilesAmount: 1
+  maxProjectilesAmount: 5
+  projectileSpawnOffset: {x: 0, y: 1, z: 0}

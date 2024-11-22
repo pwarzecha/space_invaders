@@ -4904,6 +4904,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 0
   _particleSystem: {fileID: 8780772192447866535}
+  returnAfterPlay: 1
 --- !u!1 &6226108881449017343
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: ArmoredEnemySettings
   m_EditorClassIdentifier: 
   enemyType: 1
-  scoreReward: 0
+  scoreReward: 2
   movementSpeed: 2
-  baseHealth: 2
-  maxHealthScaling: 5
-  fireInterval: 2.5
-  powerUpDropChance: 0.1
+  initHealth: 5
+  fireInterval: 2
+  projectileSpeedBoost: 0
+  projectileDamageBoost: 0
+  powerUpDropChance: 0.5

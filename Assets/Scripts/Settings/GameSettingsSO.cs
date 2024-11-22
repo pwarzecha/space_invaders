@@ -4,7 +4,8 @@ using UnityEngine;
 public class GameSettingsSO : ScriptableObject
 {
     [Header("General")]
-    public int initialPlayerHealth;
+    public Vector2 screenBoundsX;
+    public Vector2 screenBoundsY;
 
     [Header("Player")]
     public Vector3 spawnPosition;

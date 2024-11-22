@@ -19570,3 +19570,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 2
   _particleSystem: {fileID: 2794145420924410244}
+  returnAfterPlay: 1
