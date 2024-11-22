@@ -7,7 +7,7 @@ public class GameSettingsSO : ScriptableObject
     public int initialPlayerHealth;
 
     [Header("Player")]
-    [SerializeField] private Vector3 _spawnPosition;
+    public Vector3 spawnPosition;
 
     [Header("Enemy")]
     public float enemySpawnInterval = 1.0f;

@@ -13,7 +13,7 @@ public class GameplayState : GameStateBase
     {
         base.Enter();
         Debug.Log("Entered Gameplay State");
-        _player.Initialize();
+        _player.Initialize(_gameSettingsSO.spawnPosition);
         _player.OnDie += OnPlayerDie;
         _player.OnHealthUpdated += OnHealthUpdated;
         UIManager.Instance.GameplayUI.Show();
@@ -31,6 +31,7 @@ public class GameplayState : GameStateBase
         }
 
     }
+
     public override void Exit()
     {
         base.Exit();

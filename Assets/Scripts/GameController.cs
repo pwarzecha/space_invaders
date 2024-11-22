@@ -33,6 +33,7 @@ public class GameController : Singleton<GameController>
         _gameplayState = new GameplayState(gameSettingsSO, _player);
         _gameOverState = new GameOverState(gameSettingsSO, _player);
     }
+
     void Update()
     {
         if (!_running)
@@ -51,7 +52,9 @@ public class GameController : Singleton<GameController>
         stateMachine.SetState(newState);
     }
     private void OnPlayButtonSubmitted() => SetState(_gameplayState);
+
     private void OnRetryButtonSubmitted() => SetState(_gameplayState);
+
     public void OnGameOver(int _currentScore)
     {
         UIManager.Instance.GameOverUI.DisplayScore(_currentScore);
