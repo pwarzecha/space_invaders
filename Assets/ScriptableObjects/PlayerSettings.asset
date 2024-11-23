@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ea6240249c214643a5fb18813e4dadd, type: 3}
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
-  movementSpeed: 5
+  moveSpeed: 10
+  tiltAngle: 70
+  tiltSpeed: 10
   maxHealth: 3
-  fireInterval: 0.4
-  baseProjectileSpeedBoost: 0
-  baseProjectileDamageBoost: 0
+  baseFireInterval: 0.5
+  minFireInterval: 0.2
+  baseDamage: 1
+  maxDamage: 5
   baseProjectilesAmount: 1
   maxProjectilesAmount: 5
   projectileSpawnOffset: {x: 0, y: 1, z: 0}

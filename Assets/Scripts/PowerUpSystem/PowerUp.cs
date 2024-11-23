@@ -7,11 +7,8 @@ public class PowerUp : MonoBehaviour, IPoolable
 {
     [SerializeField] private PowerUpType _type;
     [SerializeField] private float _speed = 3.0f;
-    private float minYPosition;
     public void OnCreated()
     {
-        minYPosition = GameController.Instance.GameSettingsSO.screenBoundsY.x;
-
     }
 
     public void OnPooled()
@@ -20,15 +17,20 @@ public class PowerUp : MonoBehaviour, IPoolable
 
     public void OnReturn()
     {
-
     }
 
     private void Update()
     {
         transform.position += Vector3.down * (_speed * Time.deltaTime);
 
-        if (transform.position.y < minYPosition)
+        Vector3 screenMin = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
+        Vector3 screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane));
+
+        if (transform.position.x < screenMin.x || transform.position.x > screenMax.x ||
+            transform.position.y < screenMin.y || transform.position.y > screenMax.y)
+        {
             PowerUpPoolManager.Instance.Return(_type, this);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

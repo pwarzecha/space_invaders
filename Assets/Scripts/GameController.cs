@@ -5,13 +5,13 @@ using UnityEngine;
 public class GameController : Singleton<GameController>
 {
     [SerializeField] private GameSettingsSO gameSettingsSO;
-    [SerializeField] private Player _player; 
+    [SerializeField] private Player _player;
+    [SerializeField] private BackgroundScroller _backgroundScroller;
     private StateMachine stateMachine;
-    bool _running = true;
-
     private MainMenuState _mainMenuState;
     private GameplayState _gameplayState;
     private GameOverState _gameOverState;
+    bool _running = false;
 
     public bool Running => _running;
     public GameSettingsSO GameSettingsSO => gameSettingsSO;
@@ -37,10 +37,12 @@ public class GameController : Singleton<GameController>
 
     void Update()
     {
+        stateMachine.Update();
+
         if (!_running)
             return;
 
-        stateMachine.Update();
+        _backgroundScroller.UpdateBackground();
     }
     private void OnDestroy()
     {

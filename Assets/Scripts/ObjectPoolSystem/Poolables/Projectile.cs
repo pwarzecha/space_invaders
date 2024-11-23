@@ -8,8 +8,6 @@ public class Projectile : MonoBehaviour, IPoolable, IDamageable
     private float speed = 5f;
     private Vector3 _velocity;
     private int _damage;
-    private Vector2 screenBoundsX;
-    private Vector2 screenBoundsY;
     public void Initialize(Vector3 initPosition, Vector3 direction, int damage)
     {
         transform.position = initPosition;
@@ -19,8 +17,6 @@ public class Projectile : MonoBehaviour, IPoolable, IDamageable
 
     public void OnCreated()
     {
-        screenBoundsX = GameController.Instance.GameSettingsSO.screenBoundsX;
-        screenBoundsY = GameController.Instance.GameSettingsSO.screenBoundsY;
     }
 
     public void OnPooled()
@@ -38,11 +34,16 @@ public class Projectile : MonoBehaviour, IPoolable, IDamageable
 
     private void Update()
     {
-        transform.position += _velocity * Time.deltaTime;
+        Vector3 screenMin = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
+        Vector3 screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane));
 
-        if (transform.position.x < screenBoundsX.x || transform.position.x > screenBoundsX.y
-            || transform.position.y < screenBoundsY.x || transform.position.y > screenBoundsY.y)
+        if (transform.position.x < screenMin.x || transform.position.x > screenMax.x ||
+            transform.position.y < screenMin.y || transform.position.y > screenMax.y)
+        {
             ProjectilePoolManager.Instance.Return(_type, this);
+        }
+
+        transform.position += _velocity * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)

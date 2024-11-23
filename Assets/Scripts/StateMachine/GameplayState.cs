@@ -8,7 +8,7 @@ public class GameplayState : GameStateBase
     public GameplayState(GameSettingsSO gameSettingsSO, Player player) : base(gameSettingsSO, player) { }
 
     private bool _canSpawnEnemies;
-    private int _enemySpawnDelay = 3000;
+    private int _enemySpawnDelay = 1500;
     private float _enemySpawnTimer = 0.0f;
     private int _currentScore;
 
@@ -61,13 +61,18 @@ public class GameplayState : GameStateBase
     }
     private void SpawnEnemy()
     {
+        Vector3 screenMin = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
+        Vector3 screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane));
+
         EnemyType randomEnemyType = _gameSettingsSO.GetRandomEnemyType();
         var enemy = EnemyPoolManager.Instance.Get(randomEnemyType);
+
         enemy.transform.position = new Vector3(
-            UnityEngine.Random.Range(_gameSettingsSO.spawnAreaMin.x, _gameSettingsSO.spawnAreaMax.x),
-            UnityEngine.Random.Range(_gameSettingsSO.spawnAreaMin.y, _gameSettingsSO.spawnAreaMax.y),
-            0
-        );
+               UnityEngine.Random.Range(screenMin.x, screenMax.x),
+               screenMax.y, 
+               0 
+           );
+
         enemy.OnUpdateScoreRequest += UpdateScore;
     }
     private void UpdateScore(int scoreToAdd)

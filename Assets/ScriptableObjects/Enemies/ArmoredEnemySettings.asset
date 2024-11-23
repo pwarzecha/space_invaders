@@ -17,6 +17,5 @@ MonoBehaviour:
   movementSpeed: 2
   initHealth: 5
   fireInterval: 2
-  projectileSpeedBoost: 0
-  projectileDamageBoost: 0
+  _projectileDamage: 2
   powerUpDropChance: 0.5

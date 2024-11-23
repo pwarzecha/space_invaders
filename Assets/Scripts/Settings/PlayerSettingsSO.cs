@@ -4,7 +4,9 @@ using UnityEngine;
 public class PlayerSettingsSO : ScriptableObject
 {
     [Header("Movement")]
-    public float movementSpeed = 5.0f;
+    public float moveSpeed = 5.0f;
+    public float tiltAngle = 30f; 
+    public float tiltSpeed = 10f;
 
     [Header("Combat")]
     public int maxHealth = 3;

@@ -7,7 +7,7 @@ public class GameplayUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     public void Initialize(int maxHealth)
     {
-        scoreText.text = $"Score: {0}";
+        scoreText.text = "0";
 
         if (hearts.Length < maxHealth)
         {
@@ -37,6 +37,6 @@ public class GameplayUI : MonoBehaviour
     }
     public void DisplayScore(int score)
     {
-        scoreText.text = $"Score: {score}";
+        scoreText.text = score.ToString();
     }
 }

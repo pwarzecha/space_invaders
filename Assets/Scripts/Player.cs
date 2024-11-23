@@ -4,37 +4,36 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour, IDamageable
 {
     [SerializeField] private PlayerSettingsSO _playerSettingsSO;
-
-    private PlayerInputActions _inputActions;
-    private Vector2 _movementInput;
+    private Vector3 _targetPosition;
     private bool _canMove = false;
+    private float _currentTilt = 0f;
+    private float _tiltAngle = 30f;
+    private float _tiltSpeed = 10;
+
     private int _health;
     private float _fireTimer;
     private float _fireInterval;
     private int _projectileDamage;
     private int _projectileAmount;
+
     public Action OnDie;
     public Action<int> OnHealthUpdated;
 
     public PlayerSettingsSO PlayerSettingsSO => _playerSettingsSO;
 
-    private void Awake()
-    {
-        _inputActions = new PlayerInputActions();
-    }
     public void Initialize(Vector3 spawnPosition)
     {
         _health = _playerSettingsSO.maxHealth;
         _fireInterval = _playerSettingsSO.baseFireInterval;
         _projectileDamage = _playerSettingsSO.baseDamage;
         _projectileAmount = _playerSettingsSO.baseProjectilesAmount;
+        _tiltAngle = _playerSettingsSO.tiltAngle;
+        _tiltSpeed = _playerSettingsSO.tiltSpeed;
 
         transform.position = spawnPosition;
+        _targetPosition = transform.position;
         gameObject.SetActive(true);
 
-        _inputActions.Player.Enable();
-        _inputActions.Player.Movement.performed += OnMovementPerformed;
-        _inputActions.Player.Movement.canceled += OnMovementCanceled;
         _canMove = true;
     }
 
@@ -43,19 +42,11 @@ public class Player : MonoBehaviour, IDamageable
         if (_canMove)
         {
             HandleMovement();
+            UpdateTilt();
             HandleFiring();
         }
     }
 
-    private void OnMovementPerformed(InputAction.CallbackContext context)
-    {
-        _movementInput = context.ReadValue<Vector2>();
-    }
-
-    private void OnMovementCanceled(InputAction.CallbackContext context)
-    {
-        _movementInput = Vector2.zero;
-    }
 
     private void HandleMovement()
     {
@@ -64,12 +55,33 @@ public class Player : MonoBehaviour, IDamageable
             Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
             MoveToScreenPosition(touchPosition);
         }
-        else if (Mouse.current != null)
+        else if (Mouse.current != null && Mouse.current.leftButton.isPressed)
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             MoveToScreenPosition(mousePosition);
         }
+        SmoothMoveToTarget();
     }
+
+    private void UpdateTilt()
+    {
+        float targetAngle;
+
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed ||
+            Mouse.current != null && Mouse.current.leftButton.isPressed)
+        {
+            targetAngle = _currentTilt * _tiltAngle;
+        }
+        else
+        {
+            _currentTilt = Mathf.Lerp(_currentTilt, 0f, _tiltSpeed * Time.deltaTime);
+            targetAngle = 0f; 
+        }
+
+        float smoothedAngle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, targetAngle, _tiltSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Euler(0, smoothedAngle, 0);
+    }
+
     private void MoveToScreenPosition(Vector2 screenPosition)
     {
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, Camera.main.nearClipPlane));
@@ -78,8 +90,15 @@ public class Player : MonoBehaviour, IDamageable
         Vector3 screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
         float clampedX = Mathf.Clamp(worldPosition.x, -screenBounds.x, screenBounds.x);
         float clampedY = Mathf.Clamp(worldPosition.y, -screenBounds.y, screenBounds.y);
-
-        transform.position = new Vector3(clampedX, clampedY, transform.position.z);
+        _currentTilt = Mathf.Clamp(transform.position.x - clampedX, -1f, 1f);
+        _targetPosition = new Vector3(clampedX, clampedY, transform.position.z);
+    }
+    private void SmoothMoveToTarget()
+    {
+        if (Vector3.Distance(transform.position, _targetPosition) > 0.1f)
+        {
+            transform.position = Vector3.Lerp(transform.position, _targetPosition, _playerSettingsSO.moveSpeed * Time.deltaTime);
+        }
     }
     private void HandleFiring()
     {
@@ -124,9 +143,6 @@ public class Player : MonoBehaviour, IDamageable
     private void Die()
     {
         _canMove = false;
-        _inputActions.Player.Disable();
-        _inputActions.Player.Movement.performed -= OnMovementPerformed;
-        _inputActions.Player.Movement.canceled -= OnMovementCanceled;
 
         var vfx = VFXPoolManager.Instance.Get(VFXType.Explosion);
         vfx.transform.position = transform.position;

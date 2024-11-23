@@ -7,12 +7,11 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
     private int _health;
     private float _fireTimer;
     private bool isAlive;
-    private float minYPosition;
 
     public Action<int> OnUpdateScoreRequest;
     public void OnCreated()
     {
-        minYPosition = GameController.Instance.GameSettingsSO.screenBoundsY.x;
+
     }
 
     public void OnPooled()
@@ -24,7 +23,7 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
 
     public void OnReturn()
     {
-
+        OnUpdateScoreRequest = null;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -45,8 +44,14 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
     {
         transform.position += Vector3.down * (settings.movementSpeed * Time.deltaTime);
 
-        if (transform.position.y < minYPosition)
+        Vector3 screenMin = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
+        Vector3 screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane));
+
+        if (transform.position.x < screenMin.x || transform.position.x > screenMax.x ||
+            transform.position.y < screenMin.y || transform.position.y > screenMax.y)
+        {
             EnemyPoolManager.Instance.Return(settings.enemyType, this);
+        }
     }
 
     private void HandleFiring()

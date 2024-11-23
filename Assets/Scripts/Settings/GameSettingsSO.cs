@@ -24,9 +24,6 @@ public class GameSettingsSO : ScriptableObject
     public Vector3 spawnAreaMax = new Vector3(5, 5, 0);
     public List<EnemySpawnData> enemySpawnChances;
 
-    [Header("Power-Up")]
-    public float powerUpSpawnChance = 0.1f;
-
     public EnemyType GetRandomEnemyType()
     {
         float totalWeight = 0;
