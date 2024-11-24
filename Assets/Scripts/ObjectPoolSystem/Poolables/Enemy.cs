@@ -3,12 +3,16 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IPoolable, IDamageable
 {
-    [SerializeField] private EnemySettingsSO settings;
+    [SerializeField] private EnemyDataSO enemyData;
     private int _health;
     private float _fireTimer;
-    private bool isAlive;
+    private bool _isAlive;
+    private Vector3 _formationDirection;
+    private float _formationSpeed;
+    private bool _isFormation = false;
 
     public Action<int> OnUpdateScoreRequest;
+    public Action OnDie;
     public void OnCreated()
     {
 
@@ -16,14 +20,16 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
 
     public void OnPooled()
     {
-        _health = settings.initHealth;
+        _health = enemyData.initHealth;
         _fireTimer = 0;
-        isAlive = true;
+        _isAlive = true;
+        _isFormation = false;
     }
 
     public void OnReturn()
     {
         OnUpdateScoreRequest = null;
+        OnDie = null;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -34,15 +40,33 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
             Die();
         }
     }
+    public void SetFormationMovement(Vector3 direction, float speed)
+    {
+        _isFormation = true;
+        _formationDirection = direction;
+        _formationSpeed = speed;
+    }
     private void FixedUpdate()
     {
-        Move();
+        if (_isFormation)
+        {
+            MoveInFormation();
+        }
+        else
+        {
+            Move();
+        }
+
         HandleFiring();
     }
 
+    private void MoveInFormation()
+    {
+        transform.position += _formationDirection.normalized * (_formationSpeed * Time.deltaTime);
+    }
     private void Move()
     {
-        transform.position += Vector3.down * (settings.movementSpeed * Time.deltaTime);
+        transform.position += Vector3.down * (enemyData.movementSpeed * Time.deltaTime);
 
         Vector3 screenMin = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
         Vector3 screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane));
@@ -50,14 +74,15 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
         if (transform.position.x < screenMin.x || transform.position.x > screenMax.x ||
             transform.position.y < screenMin.y || transform.position.y > screenMax.y)
         {
-            EnemyPoolManager.Instance.Return(settings.enemyType, this);
+            OnUpdateScoreRequest?.Invoke(-enemyData.scoreReward);
+            EnemyPoolManager.Instance.Return(enemyData.enemyType, this);
         }
     }
 
     private void HandleFiring()
     {
         _fireTimer += Time.deltaTime;
-        if (_fireTimer >= settings.fireInterval)
+        if (_fireTimer >= enemyData.fireInterval)
         {
             Fire();
             _fireTimer = 0.0f;
@@ -67,7 +92,7 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
     private void Fire()
     {
         Projectile projectile = ProjectilePoolManager.Instance.Get(ProjectileType.Enemy);
-        projectile.Initialize(transform.position, Vector3.down, settings._projectileDamage);
+        projectile.Initialize(transform.position, Vector3.down, enemyData._projectileDamage);
     }
 
     public void Hit(int damage)
@@ -81,12 +106,13 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
 
     private void Die()
     {
-        if (!isAlive)
+        if (!_isAlive)
             return;
 
-        isAlive = false;
-        OnUpdateScoreRequest?.Invoke(settings.scoreReward);
-        if (UnityEngine.Random.value < settings.powerUpDropChance)
+        _isAlive = false;
+        OnDie?.Invoke();
+        OnUpdateScoreRequest?.Invoke(enemyData.scoreReward);
+        if (UnityEngine.Random.value < enemyData.powerUpDropChance)
         {
             var powerUp = PowerUpPoolManager.Instance.GetRandom();
             powerUp.transform.position = transform.position;
@@ -94,6 +120,6 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
 
         var vfx = VFXPoolManager.Instance.Get(VFXType.Explosion);
         vfx.transform.position = transform.position;
-        EnemyPoolManager.Instance.Return(settings.enemyType, this);
+        EnemyPoolManager.Instance.Return(enemyData.enemyType, this);
     }
 }

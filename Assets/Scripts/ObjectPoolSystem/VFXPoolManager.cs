@@ -8,5 +8,11 @@ public enum VFXType
 }
 public class VFXPoolManager : ObjectPoolManagerBase<VFX, VFXType>
 {
-
+    public static new VFXPoolManager Instance
+    {
+        get
+        {
+            return Singleton<VFXPoolManager>.Instance;
+        }
+    }
 }

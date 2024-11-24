@@ -8,20 +8,14 @@ public struct EnemySpawnData
     public float spawnChance;
 }
 
-[CreateAssetMenu(fileName = "GameSettings", menuName = "Settings/GameSettings")]
-public class GameSettingsSO : ScriptableObject
+[CreateAssetMenu(fileName = "GameData", menuName = "ScriptableObjects/GameData")]
+public class GameDataSO : ScriptableObject
 {
-    [Header("General")]
-    public Vector2 screenBoundsX;
-    public Vector2 screenBoundsY;
-
     [Header("Player")]
     public Vector3 spawnPosition;
 
     [Header("Enemy")]
     public float enemySpawnInterval = 1.0f;
-    public Vector3 spawnAreaMin = new Vector3(-5, 5, 0);
-    public Vector3 spawnAreaMax = new Vector3(5, 5, 0);
     public List<EnemySpawnData> enemySpawnChances;
 
     public EnemyType GetRandomEnemyType()

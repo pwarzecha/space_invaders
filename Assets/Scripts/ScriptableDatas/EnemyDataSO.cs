@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemySettings", menuName = "Settings/EnemySettings")]
-public class EnemySettingsSO : ScriptableObject
+[CreateAssetMenu(fileName = "EnemyData", menuName = "ScriptableObjects/EnemyData")]
+public class EnemyDataSO : ScriptableObject
 {
     [Header("General")]
     public EnemyType enemyType;

@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PlayerSettings", menuName = "Settings/PlayerSettings")]
-public class PlayerSettingsSO : ScriptableObject
+[CreateAssetMenu(fileName = "PlayerData", menuName = "ScriptableObjects/PlayerData")]
+public class PlayerDataSO : ScriptableObject
 {
     [Header("Movement")]
     public float moveSpeed = 5.0f;

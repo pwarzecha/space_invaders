@@ -36,7 +36,7 @@ public abstract class ObjectPoolManagerBase<T, TEnum> : Singleton<ObjectPoolMana
         }
     }
 
-    public T Get(TEnum type)
+    public virtual T Get(TEnum type)
     {
         if (pools.TryGetValue(type, out var pool))
         {
@@ -46,7 +46,7 @@ public abstract class ObjectPoolManagerBase<T, TEnum> : Singleton<ObjectPoolMana
         Debug.LogError($"Type {type} not defined in the pool.");
         return null;
     }
-    public T GetRandom()
+    public virtual T GetRandom()
     {
         if (pools.Count == 0)
         {
@@ -58,7 +58,7 @@ public abstract class ObjectPoolManagerBase<T, TEnum> : Singleton<ObjectPoolMana
         var randomType = (TEnum)(object)Enum.GetValues(typeof(TEnum)).GetValue(randomIndex);
         return Get(randomType);
     }
-    public void Return(TEnum type, T obj)
+    public virtual void Return(TEnum type, T obj)
     {
         if (pools.TryGetValue(type, out var pool))
         {
@@ -69,7 +69,7 @@ public abstract class ObjectPoolManagerBase<T, TEnum> : Singleton<ObjectPoolMana
             Debug.LogError($"Type {type} not defined in the pool.");
         }
     }
-    public void ReturnAll(TEnum type)
+    public virtual void ReturnAll(TEnum type)
     {
         if (pools.TryGetValue(type, out var pool))
         {

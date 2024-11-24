@@ -1759,6 +1759,7 @@ GameObject:
   m_Component:
   - component: {fileID: 980488642}
   - component: {fileID: 980488641}
+  - component: {fileID: 980488643}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -1781,6 +1782,7 @@ MonoBehaviour:
   gameSettingsSO: {fileID: 11400000, guid: c2727cb597d13334c8a8df2471405192, type: 2}
   _player: {fileID: 1316266388}
   _backgroundScroller: {fileID: 1537701603}
+  waveManager: {fileID: 980488643}
 --- !u!4 &980488642
 Transform:
   m_ObjectHideFlags: 0
@@ -1796,6 +1798,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &980488643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980488640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26721e91c54a93247bff6c3a49ca7a25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waves:
+  - {fileID: 11400000, guid: b8380d5b952cc144aaea474bd507167d, type: 2}
+  - {fileID: 11400000, guid: 5ba6f98e418006f44be3378fbe155626, type: 2}
+  - {fileID: 11400000, guid: 6baf449ea0f849b438f905459c673413, type: 2}
+  gameSettingsSO: {fileID: 11400000, guid: c2727cb597d13334c8a8df2471405192, type: 2}
 --- !u!1 &1091509390
 GameObject:
   m_ObjectHideFlags: 0

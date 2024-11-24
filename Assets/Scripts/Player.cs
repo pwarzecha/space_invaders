@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class Player : MonoBehaviour, IDamageable
 {
-    [SerializeField] private PlayerSettingsSO _playerSettingsSO;
+    [SerializeField] private PlayerDataSO _playerSettingsSO;
     private Vector3 _targetPosition;
     private bool _canMove = false;
     private float _currentTilt = 0f;
@@ -19,7 +19,7 @@ public class Player : MonoBehaviour, IDamageable
     public Action OnDie;
     public Action<int> OnHealthUpdated;
 
-    public PlayerSettingsSO PlayerSettingsSO => _playerSettingsSO;
+    public PlayerDataSO PlayerSettingsSO => _playerSettingsSO;
 
     public void Initialize(Vector3 spawnPosition)
     {

@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class GameController : Singleton<GameController>
 {
-    [SerializeField] private GameSettingsSO gameSettingsSO;
+    [SerializeField] private GameDataSO gameSettingsSO;
     [SerializeField] private Player _player;
     [SerializeField] private BackgroundScroller _backgroundScroller;
+    [SerializeField] private WaveManager waveManager;
     private StateMachine stateMachine;
     private MainMenuState _mainMenuState;
     private GameplayState _gameplayState;
@@ -14,7 +15,7 @@ public class GameController : Singleton<GameController>
     bool _running = false;
 
     public bool Running => _running;
-    public GameSettingsSO GameSettingsSO => gameSettingsSO;
+    public GameDataSO GameSettingsSO => gameSettingsSO;
 
     protected override void Awake()
     {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class GameplayState : GameStateBase
 {
-    public GameplayState(GameSettingsSO gameSettingsSO, Player player) : base(gameSettingsSO, player) { }
+    public GameplayState(GameDataSO gameSettingsSO, Player player) : base(gameSettingsSO, player) { }
 
     private bool _canSpawnEnemies;
     private int _enemySpawnDelay = 1500;

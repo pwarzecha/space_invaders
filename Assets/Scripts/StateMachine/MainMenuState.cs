@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MainMenuState : GameStateBase
 {
-    public MainMenuState(GameSettingsSO gameSettingsSO, Player player) : base(gameSettingsSO, player) { }
+    public MainMenuState(GameDataSO gameSettingsSO, Player player) : base(gameSettingsSO, player) { }
 
     public override void Enter()
     {
