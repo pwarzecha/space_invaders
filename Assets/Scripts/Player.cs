@@ -17,6 +17,7 @@ public class Player : MonoBehaviour, IDamageable
     private int _projectileAmount;
 
     public Action OnDie;
+    public Action OnGetDamage;
     public Action<int> OnHealthUpdated;
 
     public PlayerDataSO PlayerDataSO => _playerDataSO;
@@ -137,6 +138,7 @@ public class Player : MonoBehaviour, IDamageable
             Die();
         }
 
+        OnGetDamage?.Invoke();
         OnHealthUpdated?.Invoke(_health);
     }
 

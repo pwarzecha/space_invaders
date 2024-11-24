@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preparationTime: 2
   phaseTime: 15
-  randomSpawnInterval: 2
+  randomSpawnInterval: 1.25
   formations:
   - enemyType: 0
     spawnPosition: {x: -4, y: 15, z: 0}
@@ -29,20 +29,20 @@ MonoBehaviour:
     spawnPosition: {x: 2, y: 15, z: 0}
     speed: 1
   - enemyType: 0
-    spawnPosition: {x: 3, y: 15, z: 0}
+    spawnPosition: {x: 0, y: 15, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: 3, y: 18, z: 0}
+    spawnPosition: {x: -4, y: 18, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: 3, y: 18, z: 0}
+    spawnPosition: {x: 4, y: 18, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: 3, y: 18, z: 0}
+    spawnPosition: {x: 2, y: 18, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: 3, y: 18, z: 0}
+    spawnPosition: {x: -2, y: 18, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: 3, y: 18, z: 0}
+    spawnPosition: {x: 0, y: 18, z: 0}
     speed: 1

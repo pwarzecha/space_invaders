@@ -2018,10 +2018,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd47d8a020130bb458f7cefab2488e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameDataSO: {fileID: 11400000, guid: c2727cb597d13334c8a8df2471405192, type: 2}
+  _gameDataSO: {fileID: 11400000, guid: c2727cb597d13334c8a8df2471405192, type: 2}
   _player: {fileID: 1316266388}
   _backgroundScroller: {fileID: 1537701603}
   _waveManager: {fileID: 980488643}
+  _mainCamera: {fileID: 330585545}
 --- !u!4 &980488642
 Transform:
   m_ObjectHideFlags: 0

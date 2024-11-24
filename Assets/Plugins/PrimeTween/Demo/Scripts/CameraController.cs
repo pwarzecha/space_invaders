@@ -43,6 +43,7 @@ namespace PrimeTweenDemo {
             }
         }
 
+        [ContextMenu("Shake")]
         public void ShakeCamera() {
             Shake();
         }

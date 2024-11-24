@@ -1,13 +1,15 @@
+using PrimeTween;
 using System;
 using Unity.Collections;
 using UnityEngine;
 
 public class GameController : Singleton<GameController>
 {
-    [SerializeField] private GameDataSO gameDataSO;
+    [SerializeField] private GameDataSO _gameDataSO;
     [SerializeField] private Player _player;
     [SerializeField] private BackgroundScroller _backgroundScroller;
     [SerializeField] private WaveManager _waveManager;
+    [SerializeField] private Camera _mainCamera;
     private StateMachine stateMachine;
     private MainMenuState _mainMenuState;
     private GameplayState _gameplayState;
@@ -15,7 +17,7 @@ public class GameController : Singleton<GameController>
     private bool _running = false;
     private int _currentScore;
     public bool Running => _running;
-    public GameDataSO GameDataSO => gameDataSO;
+    public GameDataSO GameDataSO => _gameDataSO;
 
     protected override void Awake()
     {
@@ -31,9 +33,9 @@ public class GameController : Singleton<GameController>
     private void InitializeStateMachine()
     {
         stateMachine = new StateMachine();
-        _mainMenuState = new MainMenuState(gameDataSO, _player);
-        _gameplayState = new GameplayState(gameDataSO, _player);
-        _gameOverState = new GameOverState(gameDataSO, _player);
+        _mainMenuState = new MainMenuState(_gameDataSO, _player);
+        _gameplayState = new GameplayState(_gameDataSO, _player);
+        _gameOverState = new GameOverState(_gameDataSO, _player);
     }
 
     void Update()
@@ -55,6 +57,10 @@ public class GameController : Singleton<GameController>
     {
         stateMachine.SetState(newState);
     }
+    public IGameState GetCurrentState()
+    {
+        return stateMachine.CurrentState;
+    }
     private void OnPlayButtonSubmitted() => SetState(_gameplayState);
 
     private void OnRetryButtonSubmitted() => SetState(_gameplayState);
@@ -68,11 +74,14 @@ public class GameController : Singleton<GameController>
     {
         _running = true;
         _currentScore = 0;
+        _player.OnGetDamage += ShakeCamera;
         _waveManager.OnUpdateScoreRequest += UpdateScore;
         _waveManager.StartHandlingWaves();
     }
+
     public void OnGameStopped()
     {
+        _player.OnGetDamage -= ShakeCamera;
         _waveManager.OnUpdateScoreRequest -= UpdateScore;
         _waveManager.StopWaves();
         _running = false;
@@ -82,5 +91,9 @@ public class GameController : Singleton<GameController>
         _currentScore = Mathf.Max(0, _currentScore + scoreToAdd);
         UIManager.Instance.RefreshScore(_currentScore);
     }
-
+    private void ShakeCamera() => Shake();
+    private Sequence Shake(float startDelay = 0)
+    {
+        return Tween.ShakeCamera(_mainCamera, _gameDataSO.cameraShakeStrength, startDelay: startDelay);
+    }
 }

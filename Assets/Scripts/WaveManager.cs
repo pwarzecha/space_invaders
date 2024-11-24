@@ -15,9 +15,11 @@ public class WaveManager : MonoBehaviour
     public Action<int> OnUpdateScoreRequest;
     public async UniTask StartHandlingWaves()
     {
+        _stopWaves = false;
         foreach (var wave in _waves)
         {
-            if (_stopWaves) break;
+            if (_stopWaves) 
+                break;
 
             _currentWaveIndex++;
             Debug.Log($"Starting Wave {_currentWaveIndex}");
@@ -25,9 +27,13 @@ public class WaveManager : MonoBehaviour
             PopupManager.Instance.ShowPopup(PopupType.WaveStart);
             await UniTask.Delay((int)(wave.preparationTime * 1000));
 
+            if (_stopWaves) 
+                break;
             PopupManager.Instance.ShowPopup(PopupType.WarmupPhase);
             await RandomSpawnPhase(wave);
 
+            if (_stopWaves)
+                break;
             PopupManager.Instance.ShowPopup(PopupType.FormationPhase);
             await FormationPhase(wave);
         }

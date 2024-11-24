@@ -6,6 +6,7 @@ public class StateMachine
 {
     private IGameState currentState;
     private Stack<IGameState> stateHistory = new Stack<IGameState>();
+    public IGameState CurrentState => currentState; 
 
     public void SetState(IGameState newState)
     {

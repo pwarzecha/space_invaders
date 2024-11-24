@@ -18,6 +18,8 @@ public class GameDataSO : ScriptableObject
     public float enemySpawnInterval = 1.0f;
     public List<EnemySpawnData> enemySpawnChances;
 
+    [Header("Camera Shake")]
+    public float cameraShakeStrength = 0.5f;
     public EnemyType GetRandomEnemyType()
     {
         float totalWeight = 0;
