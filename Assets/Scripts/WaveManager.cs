@@ -1,35 +1,30 @@
-using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks; // UniTask namespace
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
-    [SerializeField] private List<WaveDataSO> waves; 
+    [SerializeField] private List<WaveDataSO> waves;
     [SerializeField] private GameDataSO gameSettingsSO;
 
     private int currentWaveIndex = 0;
     private bool isWaveActive = false;
 
-    public void StartWaves()
-    {
-        StartCoroutine(HandleWaves());
-    }
-
-    private IEnumerator HandleWaves()
+    public async UniTask StartHandlingWaves()
     {
         foreach (var wave in waves)
         {
             currentWaveIndex++;
             Debug.Log($"Starting Wave {currentWaveIndex}");
 
-            yield return StartCoroutine(RandomSpawnPhase(wave));
-            yield return StartCoroutine(FormationPhase(wave));
+            await RandomSpawnPhase(wave);
+            await FormationPhase(wave);
         }
 
         Debug.Log("All waves completed!");
     }
 
-    private IEnumerator RandomSpawnPhase(WaveDataSO wave)
+    private async UniTask RandomSpawnPhase(WaveDataSO wave)
     {
         Debug.Log("Random Spawn Phase Started");
         float elapsedTime = 0f;
@@ -37,7 +32,7 @@ public class WaveManager : MonoBehaviour
         while (elapsedTime < wave.randomSpawnDuration)
         {
             SpawnRandomEnemy();
-            yield return new WaitForSeconds(wave.randomSpawnInterval);
+            await UniTask.Delay((int)(wave.randomSpawnInterval * 1000));
             elapsedTime += wave.randomSpawnInterval;
         }
 
@@ -59,18 +54,19 @@ public class WaveManager : MonoBehaviour
         );
     }
 
-    private IEnumerator FormationPhase(WaveDataSO wave)
+    private async UniTask FormationPhase(WaveDataSO wave)
     {
         Debug.Log("Formation Phase Started");
 
         foreach (var formation in wave.formations)
         {
             SpawnFormationEnemy(formation);
-            yield return new WaitForSeconds(0.5f); 
+            await UniTask.Delay(500);
         }
 
         Debug.Log("Formation Phase Ended");
-        yield return new WaitUntil(() => EnemyPoolManager.Instance.GetActiveEnemyCount() == 0);
+
+        await UniTask.WaitUntil(() => EnemyPoolManager.Instance.GetActiveEnemyCount() == 0);
     }
 
     private void SpawnFormationEnemy(FormationData formation)

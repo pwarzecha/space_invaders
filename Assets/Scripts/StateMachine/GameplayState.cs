@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -89,9 +90,9 @@ public class GameplayState : GameStateBase
         UIManager.Instance.UpdateHealth(health);
     }
 
-    private async Task WaitForInitialSpawnDelay()
+    private async UniTask WaitForInitialSpawnDelay()
     {
-        await Task.Delay(_enemySpawnDelay);
+        await UniTask.Delay(_enemySpawnDelay);
         _canSpawnEnemies = true;
     }
 }

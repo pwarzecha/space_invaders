@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -29,18 +30,14 @@ public class VFX : MonoBehaviour, IPoolable
             _particleSystem.Clear();
         }
     }
-    private async Task WaitForParticleEnd()
+    private async UniTask WaitForParticleEnd()
     {
         var mainModule = _particleSystem.main;
         if (mainModule.loop)
-        {
-            Debug.LogWarning("Cannot await emission end on a looping ParticleSystem.");
             return;
-        }
-        while (_particleSystem.IsAlive(true))
-        {
-            await Task.Yield();
-        }
+
+        await UniTask.WaitUntil(() => !_particleSystem.IsAlive(true));
+
         ReturnToPool();
     }
 

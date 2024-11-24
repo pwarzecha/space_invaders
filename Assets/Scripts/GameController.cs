@@ -7,7 +7,7 @@ public class GameController : Singleton<GameController>
     [SerializeField] private GameDataSO gameSettingsSO;
     [SerializeField] private Player _player;
     [SerializeField] private BackgroundScroller _backgroundScroller;
-    [SerializeField] private WaveManager waveManager;
+    [SerializeField] private WaveManager _waveManager;
     private StateMachine stateMachine;
     private MainMenuState _mainMenuState;
     private GameplayState _gameplayState;
@@ -67,6 +67,7 @@ public class GameController : Singleton<GameController>
     public void OnGameStarted()
     {
         _running = true;
+        _waveManager.StartHandlingWaves();
     }
     public void OnGameStopped()
     {
