@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class Player : MonoBehaviour, IDamageable
 {
-    [SerializeField] private PlayerDataSO _playerSettingsSO;
+    [SerializeField] private PlayerDataSO _playerDataSO;
     private Vector3 _targetPosition;
     private bool _canMove = false;
     private float _currentTilt = 0f;
@@ -19,16 +19,16 @@ public class Player : MonoBehaviour, IDamageable
     public Action OnDie;
     public Action<int> OnHealthUpdated;
 
-    public PlayerDataSO PlayerSettingsSO => _playerSettingsSO;
+    public PlayerDataSO PlayerDataSO => _playerDataSO;
 
     public void Initialize(Vector3 spawnPosition)
     {
-        _health = _playerSettingsSO.maxHealth;
-        _fireInterval = _playerSettingsSO.baseFireInterval;
-        _projectileDamage = _playerSettingsSO.baseDamage;
-        _projectileAmount = _playerSettingsSO.baseProjectilesAmount;
-        _tiltAngle = _playerSettingsSO.tiltAngle;
-        _tiltSpeed = _playerSettingsSO.tiltSpeed;
+        _health = _playerDataSO.maxHealth;
+        _fireInterval = _playerDataSO.baseFireInterval;
+        _projectileDamage = _playerDataSO.baseDamage;
+        _projectileAmount = _playerDataSO.baseProjectilesAmount;
+        _tiltAngle = _playerDataSO.tiltAngle;
+        _tiltSpeed = _playerDataSO.tiltSpeed;
 
         transform.position = spawnPosition;
         _targetPosition = transform.position;
@@ -97,7 +97,7 @@ public class Player : MonoBehaviour, IDamageable
     {
         if (Vector3.Distance(transform.position, _targetPosition) > 0.1f)
         {
-            transform.position = Vector3.Lerp(transform.position, _targetPosition, _playerSettingsSO.moveSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, _targetPosition, _playerDataSO.moveSpeed * Time.deltaTime);
         }
     }
     private void HandleFiring()
@@ -120,7 +120,7 @@ public class Player : MonoBehaviour, IDamageable
             float angle = startingAngle + i * angleStep;
             Vector3 direction = Quaternion.Euler(0, 0, angle) * Vector3.up;
 
-            var projectileInitPosition = transform.position + _playerSettingsSO.projectileSpawnOffset;
+            var projectileInitPosition = transform.position + _playerDataSO.projectileSpawnOffset;
             var projectile = ProjectilePoolManager.Instance.Get(ProjectileType.Player);
             projectile.Initialize(projectileInitPosition, direction, _projectileDamage);
 
@@ -152,39 +152,39 @@ public class Player : MonoBehaviour, IDamageable
 
     public void TryHealUp(int _healthAmount)
     {
-        _health = Mathf.Clamp(_health + _healthAmount, 0, _playerSettingsSO.maxHealth);
+        _health = Mathf.Clamp(_health + _healthAmount, 0, _playerDataSO.maxHealth);
         OnHealthUpdated?.Invoke(_health);
         Debug.Log($"New health value: {_health}");
     }
 
     public void IncreaseProjectileDamage(int damageBoostAmount)
     {
-        _projectileDamage = Mathf.Clamp(_projectileDamage + damageBoostAmount, _playerSettingsSO.baseDamage, _playerSettingsSO.maxDamage);
+        _projectileDamage = Mathf.Clamp(_projectileDamage + damageBoostAmount, _playerDataSO.baseDamage, _playerDataSO.maxDamage);
         Debug.Log($"New projectile damage boost value: {_projectileDamage}");
     }
 
     public void ResetProjectileDamage()
     {
-        _projectileDamage = _playerSettingsSO.baseDamage;
+        _projectileDamage = _playerDataSO.baseDamage;
     }
     public void IncreaseFireRate(float speedBoostAmount)
     {
-        _fireInterval = Mathf.Clamp(_fireInterval - speedBoostAmount, _playerSettingsSO.minFireInterval, _playerSettingsSO.baseFireInterval);
+        _fireInterval = Mathf.Clamp(_fireInterval - speedBoostAmount, _playerDataSO.minFireInterval, _playerDataSO.baseFireInterval);
         Debug.Log($"New projectile speed boost value: {_fireInterval}");
     }
 
     public void ResetFireRate()
     {
-        _fireInterval = _playerSettingsSO.baseFireInterval;
+        _fireInterval = _playerDataSO.baseFireInterval;
     }
     public void IncreaseProjectilesAmount(int amountBoost)
     {
-        _projectileAmount = Mathf.Clamp(_projectileAmount + amountBoost, 1, _playerSettingsSO.maxProjectilesAmount);
+        _projectileAmount = Mathf.Clamp(_projectileAmount + amountBoost, 1, _playerDataSO.maxProjectilesAmount);
         Debug.Log($"New projectile amount value: {_projectileAmount}");
     }
 
     public void ResetProjectileAmount()
     {
-        _projectileAmount = _playerSettingsSO.baseProjectilesAmount;
+        _projectileAmount = _playerDataSO.baseProjectilesAmount;
     }
 }

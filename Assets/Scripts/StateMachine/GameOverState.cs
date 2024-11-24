@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameOverState : GameStateBase
 {
-    public GameOverState(GameDataSO gameSettingsSO, Player player) : base(gameSettingsSO,player) { }
+    public GameOverState(GameDataSO gameDataSO, Player player) : base(gameDataSO, player) { }
 
     public override void Enter()
     {

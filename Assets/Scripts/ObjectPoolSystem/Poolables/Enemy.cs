@@ -9,10 +9,10 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
     private bool _isAlive;
     private Vector3 _formationDirection;
     private float _formationSpeed;
-    private bool _isFormation = false;
 
-    public Action<int> OnUpdateScoreRequest;
     public Action OnDie;
+    public Action<int> OnUpdateScoreRequest;
+    public Action<Enemy> OnRemovedFromMap;
     public void OnCreated()
     {
 
@@ -23,13 +23,13 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
         _health = enemyData.initHealth;
         _fireTimer = 0;
         _isAlive = true;
-        _isFormation = false;
     }
 
     public void OnReturn()
     {
-        OnUpdateScoreRequest = null;
         OnDie = null;
+        OnUpdateScoreRequest = null;
+        OnRemovedFromMap = null;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,30 +40,12 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
             Die();
         }
     }
-    public void SetFormationMovement(Vector3 direction, float speed)
-    {
-        _isFormation = true;
-        _formationDirection = direction;
-        _formationSpeed = speed;
-    }
     private void FixedUpdate()
     {
-        if (_isFormation)
-        {
-            MoveInFormation();
-        }
-        else
-        {
-            Move();
-        }
-
+        Move();
         HandleFiring();
     }
 
-    private void MoveInFormation()
-    {
-        transform.position += _formationDirection.normalized * (_formationSpeed * Time.deltaTime);
-    }
     private void Move()
     {
         transform.position += Vector3.down * (enemyData.movementSpeed * Time.deltaTime);
@@ -71,14 +53,27 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
         Vector3 screenMin = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
         Vector3 screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane));
 
-        if (transform.position.x < screenMin.x || transform.position.x > screenMax.x ||
-            transform.position.y < screenMin.y || transform.position.y > screenMax.y)
+        if (transform.position.y < screenMin.y)
         {
             OnUpdateScoreRequest?.Invoke(-enemyData.scoreReward);
+            OnRemovedFromMap?.Invoke(this);
             EnemyPoolManager.Instance.Return(enemyData.enemyType, this);
         }
     }
+    public void MoveWithFormation()
+    {
+        transform.position += _formationDirection * (_formationSpeed * Time.deltaTime);
+    }
+    public void SetFormationMovement(Vector3 direction, float speed)
+    {
+        _formationDirection = direction;
+        _formationSpeed = speed;
+    }
 
+    public void InvertDirection()
+    {
+        _formationDirection.x = -_formationDirection.x;
+    }
     private void HandleFiring()
     {
         _fireTimer += Time.deltaTime;
@@ -111,6 +106,7 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
 
         _isAlive = false;
         OnDie?.Invoke();
+        OnRemovedFromMap?.Invoke(this);
         OnUpdateScoreRequest?.Invoke(enemyData.scoreReward);
         if (UnityEngine.Random.value < enemyData.powerUpDropChance)
         {

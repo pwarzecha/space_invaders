@@ -9,7 +9,6 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private MenuUI _menuUI;
     [SerializeField] private GameplayUI _gameplayUI;
     [SerializeField] private GameOverUI _gameOverUI;
-
     public MenuUI MenuUI  => _menuUI; 
     public GameplayUI GameplayUI => _gameplayUI; 
     public GameOverUI GameOverUI => _gameOverUI; 

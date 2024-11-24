@@ -2,11 +2,11 @@ using System;
 using UnityEngine;
 public abstract class GameStateBase : IGameState
 {
-    protected GameDataSO _gameSettingsSO;
+    protected GameDataSO gameDataSO;
     protected Player _player;
-    public GameStateBase(GameDataSO gameSettingsSO, Player player)
+    public GameStateBase(GameDataSO gameDataSO, Player player)
     {
-        _gameSettingsSO = gameSettingsSO;
+        this.gameDataSO = gameDataSO;
         _player = player;
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameController : Singleton<GameController>
 {
-    [SerializeField] private GameDataSO gameSettingsSO;
+    [SerializeField] private GameDataSO gameDataSO;
     [SerializeField] private Player _player;
     [SerializeField] private BackgroundScroller _backgroundScroller;
     [SerializeField] private WaveManager _waveManager;
@@ -12,10 +12,10 @@ public class GameController : Singleton<GameController>
     private MainMenuState _mainMenuState;
     private GameplayState _gameplayState;
     private GameOverState _gameOverState;
-    bool _running = false;
-
+    private bool _running = false;
+    private int _currentScore;
     public bool Running => _running;
-    public GameDataSO GameSettingsSO => gameSettingsSO;
+    public GameDataSO GameDataSO => gameDataSO;
 
     protected override void Awake()
     {
@@ -31,9 +31,9 @@ public class GameController : Singleton<GameController>
     private void InitializeStateMachine()
     {
         stateMachine = new StateMachine();
-        _mainMenuState = new MainMenuState(gameSettingsSO, _player);
-        _gameplayState = new GameplayState(gameSettingsSO, _player);
-        _gameOverState = new GameOverState(gameSettingsSO, _player);
+        _mainMenuState = new MainMenuState(gameDataSO, _player);
+        _gameplayState = new GameplayState(gameDataSO, _player);
+        _gameOverState = new GameOverState(gameDataSO, _player);
     }
 
     void Update()
@@ -59,7 +59,7 @@ public class GameController : Singleton<GameController>
 
     private void OnRetryButtonSubmitted() => SetState(_gameplayState);
 
-    public void OnGameOver(int _currentScore)
+    public void OnGameOver()
     {
         UIManager.Instance.GameOverUI.DisplayScore(_currentScore);
         SetState(_gameOverState);
@@ -67,12 +67,20 @@ public class GameController : Singleton<GameController>
     public void OnGameStarted()
     {
         _running = true;
+        _currentScore = 0;
+        _waveManager.OnUpdateScoreRequest += UpdateScore;
         _waveManager.StartHandlingWaves();
     }
     public void OnGameStopped()
     {
+        _waveManager.OnUpdateScoreRequest -= UpdateScore;
+        _waveManager.StopWaves();
         _running = false;
     }
-
+    private void UpdateScore(int scoreToAdd)
+    {
+        _currentScore = Mathf.Max(0, _currentScore + scoreToAdd);
+        UIManager.Instance.RefreshScore(_currentScore);
+    }
 
 }
