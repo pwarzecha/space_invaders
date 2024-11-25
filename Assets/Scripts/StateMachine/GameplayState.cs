@@ -40,6 +40,10 @@ public class GameplayState : GameStateBase
         {
             ProjectilePoolManager.Instance.ReturnAll(type);
         }
+        foreach (PowerUpType type in System.Enum.GetValues(typeof(PowerUpType)))
+        {
+            PowerUpPoolManager.Instance.ReturnAll(type);
+        }
         GameController.Instance.OnGameStopped();
     }
 
