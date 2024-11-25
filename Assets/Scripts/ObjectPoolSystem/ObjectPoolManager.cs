@@ -69,19 +69,22 @@ public abstract class ObjectPoolManagerBase<T, TEnum> : Singleton<ObjectPoolMana
             Debug.LogError($"Type {type} not defined in the pool.");
         }
     }
-    public virtual void ReturnAll(TEnum type)
+    public virtual void ReturnAll()
     {
-        if (pools.TryGetValue(type, out var pool))
+        foreach (TEnum type in System.Enum.GetValues(typeof(TEnum)))
         {
-            var activeObjects = pool.GetActiveObjects();
-            foreach (var obj in activeObjects)
+            if (pools.TryGetValue(type, out var pool))
             {
-                pool.Return(obj);
+                var activeObjects = pool.GetActiveObjects();
+                foreach (var obj in activeObjects)
+                {
+                    pool.Return(obj);
+                }
             }
-        }
-        else
-        {
-            Debug.LogError($"Type {type} not defined in the pool.");
+            else
+            {
+                Debug.LogError($"Type {type} not defined in the pool.");
+            }
         }
     }
 }

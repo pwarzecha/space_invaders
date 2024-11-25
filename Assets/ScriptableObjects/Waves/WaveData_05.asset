@@ -17,31 +17,31 @@ MonoBehaviour:
   randomSpawnInterval: 1
   formations:
   - enemyType: 1
-    spawnPosition: {x: -4, y: 15, z: 0}
+    spawnPosition: {x: -6, y: 15, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: 4, y: 15, z: 0}
+    spawnPosition: {x: 6, y: 15, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: -2, y: 15, z: 0}
+    spawnPosition: {x: -3, y: 15, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: 2, y: 15, z: 0}
+    spawnPosition: {x: 3, y: 15, z: 0}
     speed: 1
   - enemyType: 1
     spawnPosition: {x: 0, y: 15, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: 4, y: 18, z: 0}
+    spawnPosition: {x: 6, y: 18, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: -4, y: 18, z: 0}
+    spawnPosition: {x: -6, y: 18, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: 2, y: 18, z: 0}
+    spawnPosition: {x: 3, y: 18, z: 0}
     speed: 1
   - enemyType: 1
-    spawnPosition: {x: -2, y: 18, z: 0}
+    spawnPosition: {x: -3, y: 18, z: 0}
     speed: 1
   - enemyType: 1
     spawnPosition: {x: 0, y: 18, z: 0}

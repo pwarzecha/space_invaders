@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks; 
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
@@ -10,15 +10,17 @@ public class WaveManager : MonoBehaviour
 
     private int _currentWaveIndex = 0;
     private bool _stopWaves = false;
+    private bool _isInfiniteSpawning = false;
     private List<Enemy> _currentFormationEnemies = new List<Enemy>();
 
     public Action<int> OnUpdateScoreRequest;
     public async UniTask StartHandlingWaves()
     {
         _stopWaves = false;
+        _currentWaveIndex = 0;
         foreach (var wave in _waves)
         {
-            if (_stopWaves) 
+            if (_stopWaves)
                 break;
 
             _currentWaveIndex++;
@@ -27,7 +29,7 @@ public class WaveManager : MonoBehaviour
             PopupManager.Instance.ShowPopup(PopupType.WaveStart);
             await UniTask.Delay((int)(wave.preparationTime * 1000));
 
-            if (_stopWaves) 
+            if (_stopWaves)
                 break;
             PopupManager.Instance.ShowPopup(PopupType.WarmupPhase);
             await RandomSpawnPhase(wave);
@@ -37,11 +39,17 @@ public class WaveManager : MonoBehaviour
             PopupManager.Instance.ShowPopup(PopupType.FormationPhase);
             await FormationPhase(wave);
         }
+
+        if (_stopWaves)
+            return;
+
+        StartInfiniteSpawn();
     }
 
     public void StopWaves()
     {
         _stopWaves = true;
+        _isInfiniteSpawning = false;
     }
 
     private async UniTask RandomSpawnPhase(WaveDataSO wave)
@@ -151,6 +159,18 @@ public class WaveManager : MonoBehaviour
             {
                 enemy.MoveWithFormation();
             }
+        }
+    }
+
+    private async void StartInfiniteSpawn()
+    {
+        Debug.Log("Starting Infinite Spawn Phase");
+        _isInfiniteSpawning = true;
+
+        while (_isInfiniteSpawning)
+        {
+            SpawnRandomEnemy();
+            await UniTask.Delay((int)(_gameDataSO.enemySpawnInterval * 1000));
         }
     }
 }

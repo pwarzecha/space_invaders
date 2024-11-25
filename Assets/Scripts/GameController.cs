@@ -15,7 +15,6 @@ public class GameController : Singleton<GameController>
     private GameplayState _gameplayState;
     private GameOverState _gameOverState;
     private bool _running = false;
-    private int _currentScore;
     public bool Running => _running;
     public GameDataSO GameDataSO => _gameDataSO;
 
@@ -34,7 +33,7 @@ public class GameController : Singleton<GameController>
     {
         stateMachine = new StateMachine();
         _mainMenuState = new MainMenuState(_gameDataSO, _player);
-        _gameplayState = new GameplayState(_gameDataSO, _player);
+        _gameplayState = new GameplayState(_gameDataSO, _player, _backgroundScroller, _waveManager, _mainCamera);
         _gameOverState = new GameOverState(_gameDataSO, _player);
     }
 
@@ -62,38 +61,17 @@ public class GameController : Singleton<GameController>
         return stateMachine.CurrentState;
     }
     private void OnPlayButtonSubmitted() => SetState(_gameplayState);
-
     private void OnRetryButtonSubmitted() => SetState(_gameplayState);
-
-    public void OnGameOver()
-    {
-        UIManager.Instance.GameOverUI.DisplayScore(_currentScore);
-        SetState(_gameOverState);
-    }
+    public void OnGameOver() => SetState(_gameOverState);
+    
     public void OnGameStarted()
     {
         _running = true;
-        _currentScore = 0;
-        _player.OnGetDamage += ShakeCamera;
-        _waveManager.OnUpdateScoreRequest += UpdateScore;
-        _waveManager.StartHandlingWaves();
     }
 
     public void OnGameStopped()
     {
-        _player.OnGetDamage -= ShakeCamera;
-        _waveManager.OnUpdateScoreRequest -= UpdateScore;
-        _waveManager.StopWaves();
         _running = false;
     }
-    private void UpdateScore(int scoreToAdd)
-    {
-        _currentScore = Mathf.Max(0, _currentScore + scoreToAdd);
-        UIManager.Instance.RefreshScore(_currentScore);
-    }
-    private void ShakeCamera() => Shake();
-    private Sequence Shake(float startDelay = 0)
-    {
-        return Tween.ShakeCamera(_mainCamera, _gameDataSO.cameraShakeStrength, startDelay: startDelay);
-    }
+    
 }
